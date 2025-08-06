@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using CAMS.Application.Dtos;
+using CAMS.Application.Factories;
 using CAMS.Application.Interfaces;
 using CAMS.Application.Services;
 using CAMS.Domain.Entities.Vehicle;
@@ -12,12 +13,14 @@ namespace CAMS.Application.UnitTests;
 public class VehicleServiceTests
 {
     private readonly Mock<IVehicleRepository> _vehicleRepositoryMock;
+    private readonly Mock<IVehicleFactory> _vehicleFactoryMock;
     private readonly VehicleService _sut;
 
     public VehicleServiceTests()
     {
         _vehicleRepositoryMock = new Mock<IVehicleRepository>();
-        _sut = new VehicleService(_vehicleRepositoryMock.Object);
+        _vehicleFactoryMock = new Mock<IVehicleFactory>();
+        _sut = new VehicleService(_vehicleRepositoryMock.Object, _vehicleFactoryMock.Object);
     }
 
     [Fact]
@@ -34,6 +37,9 @@ public class VehicleServiceTests
 
         _vehicleRepositoryMock.Setup(repo => repo.GetVehicleByIdAsync(dto.Id))
             .ReturnsAsync((Vehicle)null);
+
+        _vehicleFactoryMock.Setup(f => f.Create(It.IsAny<CreateVehicleDto>()))
+            .Returns(new Hatchback(dto.Manufacturer, dto.Model, dto.Year, dto.StartingBid, dto.NumberOfDoors!.Value));
 
         // Act
         await _sut.CreateVehicleAsync(dto);
@@ -57,6 +63,8 @@ public class VehicleServiceTests
         _vehicleRepositoryMock.Setup(repo => repo.GetVehicleByIdAsync(existingVehicle.Id))
             .ReturnsAsync(existingVehicle);
 
+        _vehicleFactoryMock.Setup(f => f.Create(It.IsAny<CreateVehicleDto>()))
+            .Returns(existingVehicle);
 
         var dto = new CreateVehicleDto(
             VehicleType.Hatchback,

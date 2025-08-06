@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using CAMS.Application.Dtos;
+using CAMS.Application.Factories;
 using CAMS.Application.Interfaces;
 using CAMS.Application.Validators;
 using CAMS.Domain.Entities.Vehicle;
@@ -11,32 +12,19 @@ namespace CAMS.Application.Services;
 public class VehicleService : IVehicleService
 {
     private readonly IVehicleRepository _vehicleRepository;
+    private readonly IVehicleFactory _vehicleFactory;
 
-    public VehicleService(IVehicleRepository vehicleRepository)
+    public VehicleService(IVehicleRepository vehicleRepository, IVehicleFactory vehicleFactory)
     {
         _vehicleRepository = vehicleRepository;
+        _vehicleFactory = vehicleFactory;
     }
 
     public async Task CreateVehicleAsync(CreateVehicleDto createVehicleDto)
     {
         CreateVehicleDtoValidator.Validate(createVehicleDto);
 
-        Vehicle vehicle = createVehicleDto.Type switch
-        {
-            VehicleType.Hatchback => new Hatchback(createVehicleDto.Model, createVehicleDto.Model,
-                createVehicleDto.Year, createVehicleDto.StartingBid, createVehicleDto.NumberOfDoors.Value,
-                createVehicleDto.Id),
-            VehicleType.Sedan => new Sedan(createVehicleDto.Manufacturer, createVehicleDto.Model,
-                createVehicleDto.Year, createVehicleDto.StartingBid, createVehicleDto.NumberOfDoors.Value,
-                createVehicleDto.Id),
-            VehicleType.Suv => new Suv(createVehicleDto.Manufacturer, createVehicleDto.Model,
-                createVehicleDto.Year,
-                createVehicleDto.StartingBid, createVehicleDto.NumberOfSeats!.Value, createVehicleDto.Id),
-            VehicleType.Truck => new Truck(createVehicleDto.Manufacturer, createVehicleDto.Model,
-                createVehicleDto.Year, createVehicleDto.StartingBid, createVehicleDto.LoadCapacity!.Value,
-                createVehicleDto.Id),
-            _ => throw new ArgumentException("Invalid vehicle type")
-        };
+        var vehicle = _vehicleFactory.Create(createVehicleDto);
 
         if (await _vehicleRepository.GetVehicleByIdAsync(vehicle.Id) != null)
         {

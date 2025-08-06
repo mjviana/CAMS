@@ -10,9 +10,9 @@ A clean and extensible **Car Auction Management System** built with C# and .NET 
     -   [📚 Table of Contents](#-table-of-contents)
     -   [📖 Context](#-context)
     -   [✅ Business Rules](#-business-rules)
-        -   [✔️ Vehicle Management](#️-vehicle-management)
-        -   [✔️ Auction Lifecycle](#️-auction-lifecycle)
-        -   [✔️ Bidding Rules](#️-bidding-rules)
+        -   [ Vehicle Management](#️-vehicle-management)
+        -   [ Auction Lifecycle](#️-auction-lifecycle)
+        -   [ Bidding Rules](#️-bidding-rules)
     -   [🧠 Architecture \& Design](#-architecture--design)
         -   [Design Patterns \& Principles Used:](#design-patterns--principles-used)
     -   [📦 Project Structure](#-project-structure)
@@ -67,7 +67,7 @@ This project is part of a technical challenge with the following requirements:
 
 ## ✅ Business Rules
 
-### ✔️ Vehicle Management
+### Vehicle Management
 
 -   Vehicles can be created with type-specific properties.
 -   Vehicles may have a **unique identifier**, which can either be system-generated (GUID) or externally supplied.
@@ -78,7 +78,7 @@ This project is part of a technical challenge with the following requirements:
     -   Year
     -   Or any **combination of filters**
 
-### ✔️ Auction Lifecycle
+### Auction Lifecycle
 
 -   Auctions can be in the following states:
     -   **Created**
@@ -91,11 +91,11 @@ This project is part of a technical challenge with the following requirements:
 -   Auctions must be associated with an existing vehicle.
 -   **Closed or canceled** auctions cannot be reopened.
 
-### ✔️ Bidding Rules
+### Bidding Rules
 
 -   Bids can only be placed on **active** auctions.
 -   The bid value must be **greater than the current highest bid**.
--   The system throws domain-specific exceptions for invalid operations (e.g. `DuplicateIdentifierException`, `AuctionDoesNotExistException`, etc).
+-   The system throws domain-specific exceptions for invalid operations (e.g. `AuctionDoesNotExistException`, etc).
 
 ---
 
@@ -117,7 +117,7 @@ This project follows a **Clean Architecture** approach with a clear separation o
 -   **Domain-Driven Design (DDD)**
 -   **Dependency Injection (DI)**
 -   **Factory Pattern** (for vehicle creation logic)
--   **Separation of Concerns**
+-   **SOLID Principles**
 
 ---
 
@@ -125,9 +125,9 @@ This project follows a **Clean Architecture** approach with a clear separation o
 
 ```
 CAMS.Domain/           # Entities (e.g., Vehicle, Auction, Bid)
-CAMS.Application/      # Services, DTOs, Validators, Interfaces
+CAMS.Application/      # Services, DTOs, Validators, Interfaces, Factory
 CAMS.Infrastructure/   # In-memory repository implementations
-CAMS.Presentation/          # Demo CLI App (console-based interaction)
+CAMS.Presentation/     # Demo Console App
 CAMS.Tests/            # Unit Tests using xUnit and Moq
 ```
 
@@ -189,7 +189,7 @@ Here are some enhancements that could be made:
 
 Working on this challenge has been a rewarding learning experience. Here are a few reflections from the journey:
 
--   🏁 **Understanding Auctions**  
+-   💰 **Understanding Auctions**  
     I’ve never personally participated in an auction, so I had to do some research to understand how they typically function. While I made efforts to implement the business logic correctly, I acknowledge that I may have misunderstood or missed certain real-world behaviors. Thankfully, many issues were caught and corrected through unit testing — though some subtle ones might have slipped through. 😊
 
 -   🚗 **Vehicle Types Exploration**  
