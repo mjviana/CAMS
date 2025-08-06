@@ -5,7 +5,7 @@ using CAMS.Domain.Enums;
 
 namespace CAMS.Application.Factories;
 
-public class SedanCreator : IVehicleCreator
+public class SedanTypeCreator : IVehicleTypeCreator
 {
     public Vehicle Create(CreateVehicleDto createVehicleDto)
     {
