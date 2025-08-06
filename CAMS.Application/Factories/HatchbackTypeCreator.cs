@@ -1,0 +1,17 @@
+using CAMS.Application.Dtos;
+using CAMS.Application.Interfaces;
+using CAMS.Domain.Entities.Vehicle;
+using CAMS.Domain.Enums;
+
+namespace CAMS.Application.Factories;
+
+public class HatchbackCreator : IVehicleCreator
+{
+    public Vehicle Create(CreateVehicleDto createVehicleDto)
+    {
+        return new Hatchback(createVehicleDto.Manufacturer, createVehicleDto.Model, createVehicleDto.Year,
+            createVehicleDto.StartingBid, createVehicleDto.NumberOfDoors!.Value, createVehicleDto.Id);
+    }
+
+    public VehicleType Type => VehicleType.Hatchback;
+}
